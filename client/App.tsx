@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {CommonActions, NavigationContainer} from '@react-navigation/native';
+
 import {
   View,
   Text,
@@ -44,7 +45,16 @@ let SplashScreen = ({navigation}) => {
   );
 };
 
-function DetailsScreen() {
+function DetailsScreen({navigation}) {
+  navigation.dispatch(state => {
+    const routes = state.routes.filter(r => r.name != 'Splash');
+
+    return CommonActions.reset({
+      ...state,
+      routes,
+      index: routes.length - 1,
+    });
+  });
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Details Screen</Text>
@@ -57,7 +67,10 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
