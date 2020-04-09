@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import {
   View,
   Text,
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
     width: '65%',
     height: '30%',
-    marginBottom: '9%',
+    marginBottom: '5%',
   },
   title: {
     fontSize: 35,
@@ -30,16 +32,36 @@ const styles = StyleSheet.create({
   },
 });
 
-const App = () => {
-  let isLoading;
-
+let SplashScreen = ({navigation}) => {
+  setTimeout(() => navigation.navigate('Details'), 2000);
   return (
     <View style={styles.container}>
       <StatusBar hidden />
       <Image style={styles.image} source={require('./img/start.png')}></Image>
-      <ActivityIndicator color="black"></ActivityIndicator>
+      <ActivityIndicator animating={true} color="black"></ActivityIndicator>
       <Text style={styles.title}>꿀이의 일기</Text>
     </View>
+  );
+};
+
+function DetailsScreen() {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Details Screen</Text>
+    </View>
+  );
+}
+
+const Stack = createStackNavigator();
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
